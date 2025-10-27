@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block titulo %}Catálogo de Cartas Pokémon{% endblock %}
+
+{% block contenido %}
+<div class="page-header max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-4 flex justify-between items-center border-b border-gray-200">
+    <h2 class="text-4xl font-extrabold text-gray-900">Catálogo de Cartas Pokémon</h2>
+    <!-- Namespace actualizado a 'app_pokemon' -->
+    <a href="{% url 'app_pokemon:crear_producto' %}" 
+       class="btn bg-yellow-500 hover:bg-yellow-600 text-gray-800 font-bold py-2 px-4 rounded-full shadow-lg transition duration-300 flex items-center space-x-2">
+        <span>➕ Añadir Carta</span>
+    </a>
+</div>
+
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 product-grid">
+        {% for producto in productos %}
+        <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transform hover:-translate-y-1 transition duration-500 overflow-hidden product-card border border-gray-100">
+            <!-- Namespace actualizado a 'app_pokemon' -->
+            <a href="{% url 'app_pokemon:detalle_producto' producto.id %}" class="block">
+                
+                <!-- Imagen -->
+                <div class="h-64 flex items-center justify-center bg-gray-50 border-b border-gray-200">
+                    {% if producto.imagen %}
+                        <!-- Nombre del campo de imagen actualizado a 'producto.imagen' -->
+                        <img src="{{ producto.imagen.url }}" alt="Imagen de {{ producto.nombre }}" 
+                             class="h-full w-full object-contain p-2 product-img">
+                    {% else %}
+                        <div class="product-placeholder text-7xl text-gray-400">
+                            
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Contenido de la Carta -->
+                <div class="p-4">
+                    <h3 class="text-xl font-bold text-gray-900 mb-1 truncate">{{ producto.nombre }}</h3>
+                    
+                    <p class="text-sm text-gray-600 mb-3">
+                        <!-- Mostrando la expansión -->
+                        Expansión: <span class="font-semibold text-purple-700">{{ producto.expansion.nombre_expansion|default:"N/A" }}</span>
+                    </p>
+
+                    <!-- Precio (Campo actualizado a 'producto.precio_venta') -->
+                    <p class="product-price text-2xl font-black text-red-500 mb-1">
+                        ${{ producto.precio_venta|floatformat:2 }}
+                    </p>
+                    
+                    <!-- Stock -->
+                    <p class="product-stock text-sm {% if producto.stock > 0 %}text-green-600{% else %}text-red-600{% endif %} font-medium">
+                        Stock: {{ producto.stock }} unidades
+                    </p>
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <!-- Mensaje si no hay productos -->
+        <div class="md:col-span-4 text-center py-12 bg-gray-100 rounded-lg">
+            <p class="text-xl text-gray-600 font-semibold mb-4">¡El álbum está vacío! 😭</p>
+            <p class="text-gray-500">No hay cartas Pokémon registradas en el catálogo. Usa el botón "➕ Añadir Carta" para comenzar.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
+
+<style>
+/* Estilos básicos para la estructura si no hay Tailwind. */
+.product-grid {
+    /* grid-cols-4, gap-8 son clases Tailwind simuladas */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+.product-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+.product-card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+    transform: translateY(-4px);
+}
+.product-img {
+    /* Asegura que la imagen se vea bien dentro del contenedor */
+    object-fit: contain;
+}
+</style>

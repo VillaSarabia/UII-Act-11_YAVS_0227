@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block titulo %}Expansiones | Tienda Pokémon{% endblock %}
+
+{% block contenido %}
+<div class="page-header flex justify-between items-center mb-6 border-b pb-3">
+    <h2 class="text-3xl font-bold text-gray-800">Catálogo de Colecciones (Expansiones)</h2>
+    <!-- Este es el botón para ir al formulario de creación -->
+    <a href="{% url 'app_pokemon:crear_expansion' %}" class="btn btn-primary">+ Crear Nueva Expansión</a>
+</div>
+
+<ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for expansion in expansiones %}
+    <li class="p-5 bg-white rounded-lg shadow-md border-t-4 {% if expansion.activa %}border-green-500{% else %}border-red-500{% endif %} hover:shadow-lg transition duration-300">
+        <h3 class="text-2xl font-semibold mb-2 text-gray-900">{{ expansion.nombre_expansion }}</h3>
+        <p class="text-sm text-gray-600 mb-4">
+            {% if expansion.activa %}
+                <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">ACTIVA</span>
+            {% else %}
+                <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">INACTIVA</span>
+            {% endif %}
+        </p>
+        <p class="text-sm text-gray-700"><strong>Fecha de Lanzamiento:</strong> {{ expansion.fecha_lanzamiento|date:"d M Y" }}</p>
+        <p class="text-sm text-gray-700"><strong>Idioma:</strong> {{ expansion.idioma }}</p>
+        <p class="text-sm text-gray-700"><strong>Total de Cartas:</strong> {{ expansion.total_cartas }}</p>
+    </li>
+    {% empty %}
+    <li class="col-span-full p-6 text-center bg-yellow-100 border border-yellow-400 text-yellow-700 rounded-lg">
+        <p class="text-lg font-medium">No hay expansiones registradas. Por favor, haz clic en "+ Crear Nueva Expansión" para empezar.</p>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

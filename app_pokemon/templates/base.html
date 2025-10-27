@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Tienda Pokémon - Colecciones{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        /* Estilos básicos para la presentación */
+        body { font-family: sans-serif; background-color: #f0f4f8; margin: 0; }
+        .wrapper { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+        .main-header { background-color: #3b82f6; color: white; padding: 1rem 0; display: flex; justify-content: space-between; align-items: center; border-radius: 0 0 10px 10px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .main-header h1 { margin-left: 1rem; font-size: 1.8rem; }
+        .main-header a { color: white; text-decoration: none; transition: opacity 0.2s; }
+        .main-header a:hover { opacity: 0.8; }
+        .main-nav { margin-right: 1rem; }
+        .main-nav a { margin-left: 1.5rem; font-weight: 600; padding: 0.5rem 0; }
+        .main-content { padding: 2rem 0; min-height: 70vh; }
+        .main-footer { text-align: center; padding: 1rem 0; margin-top: 2rem; border-top: 1px solid #ccc; color: #666; font-size: 0.9rem; }
+        .btn { display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem; text-align: center; text-decoration: none; cursor: pointer; transition: background-color 0.2s, transform 0.1s; font-weight: 600; }
+        .btn-primary { background-color: #2563eb; color: white; border: none; }
+        .btn-primary:hover { background-color: #1d4ed8; transform: translateY(-1px); }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <header class="main-header">
+            <h1><a href="{% url 'app_pokemon:listar_productos' %}">🛒 Tienda Pokémon</a></h1>
+            
+            <nav class="main-nav">
+                <!-- 1. Enlace a la lista de productos/cartas -->
+                <a href="{% url 'app_pokemon:listar_productos' %}">📦 Cartas</a>
+                
+                <!-- 2. ENLACE FALTANTE: Debe llevar a la lista de expansiones -->
+                <a href="{% url 'app_pokemon:listar_expansiones' %}">📚 Colecciones</a> 
+                
+                <!-- 3. Enlace para crear producto -->
+                <a href="{% url 'app_pokemon:crear_producto' %}">➕ Añadir Carta</a>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            {% block contenido %}{% endblock %}
+        </main>
+
+        <footer class="main-footer">
+            <p>© 2025 Tienda Pokémon - Proyecto Educativo de Django</p>
+        </footer>
+    </div>
+</body>
+</html>

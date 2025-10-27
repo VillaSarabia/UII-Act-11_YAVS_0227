@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block titulo %}{{ producto.nombre }} | Tienda Pokémon{% endblock %}
+
+{% block contenido %}
+<article class="product-detail p-6 max-w-4xl mx-auto bg-white rounded-xl shadow-2xl mt-10">
+    
+    <h1 class="text-4xl font-extrabold text-gray-800 mb-6 border-b pb-2">{{ producto.nombre }}</h1>
+
+    <div class="product-banner grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+        
+        <!-- Columna de Imagen -->
+        <div class="md:col-span-1 flex justify-center">
+            {% if producto.imagen %}
+                <img src="{{ producto.imagen.url }}" 
+                     alt="Imagen de la carta {{ producto.nombre }}" 
+                     class="detail-photo w-full h-auto object-contain rounded-lg shadow-lg border-4 border-yellow-400">
+            {% else %}
+                <div class="detail-placeholder w-full h-80 bg-gray-200 flex items-center justify-center text-6xl text-gray-500 rounded-lg">
+                    
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Columna de Información Principal -->
+        <div class="md:col-span-2 product-info space-y-4">
+            
+            <h3 class="detail-price text-5xl font-black text-red-600">
+                ${{ producto.precio_venta|floatformat:2 }}
+            </h3>
+            
+            <div class="data-grid grid grid-cols-2 gap-y-4 text-lg">
+                <p><strong>Tipo:</strong> <span class="text-blue-700 font-semibold">{{ producto.tipo }}</span></p>
+                
+                <p><strong>Stock Disponible:</strong> 
+                    <span class="font-bold {% if producto.stock > 0 %}text-green-600{% else %}text-red-600{% endif %}">
+                        {{ producto.stock }} unidades
+                    </span>
+                </p>
+                
+                <!-- Mostrando la relación con el modelo Expansiones -->
+                {% if producto.expansion %}
+                <p><strong>Expansión:</strong> 
+                    <span class="font-semibold">{{ producto.expansion.nombre_expansion }}</span> 
+                    ({{ producto.expansion.idioma }})
+                </p>
+                <p><strong>Fecha de Lanzamiento:</strong> 
+                    <span class="font-semibold">{{ producto.expansion.fecha_lanzamiento|date:"d M Y" }}</span>
+                </p>
+                {% endif %}
+
+            </div>
+
+            <!-- Descripción (usando el campo "descripcion" que fue eliminado, uso el campo 'nombre' como ejemplo, pero en un caso real se necesitaría agregar una descripción al modelo si se quiere mostrar aquí) -->
+            <div class="pt-4 border-t mt-4">
+                <p class="text-gray-600 italic">
+                    <!-- Nota: El modelo Producto original tenía 'descripcion'. Como lo eliminamos, uso el nombre como fallback para un texto. Si quieres una descripción, debes añadir un campo de descripción al modelo Producto. -->
+                    Detalles: Esta es una carta de la expansión '{{ producto.expansion.nombre_expansion|default:"Sin Expansión" }}' del tipo {{ producto.tipo }}.
+                </p>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Acciones de Edición/Eliminación -->
+    <div class="detail-actions flex justify-center gap-4 mt-8 pt-4 border-t">
+        <!-- Actualizado el namespace a 'app_pokemon' -->
+        <a href="{% url 'app_pokemon:editar_producto' producto.id %}" 
+           class="btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full shadow transition duration-300">
+            ✏️ Editar Carta
+        </a>
+        <!-- Actualizado el namespace a 'app_pokemon' -->
+        <a href="{% url 'app_pokemon:borrar_producto' producto.id %}" 
+           class="btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full shadow transition duration-300">
+            🗑️ Eliminar Carta
+        </a>
+    </div>
+
+</article>
+
+<!-- Estilos base para la estética (usando clases simuladas de Tailwind) -->
+<style>
+    /* Estilos básicos para la estructura si no hay Tailwind */
+    .product-detail {
+        /* max-width, mx-auto, shadow-2xl, etc., son clases Tailwind simuladas */
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        background-color: white;
+    }
+    .detail-photo {
+        max-height: 400px;
+        border: 4px solid #f6e05e; /* Amarillo Pokémon */
+    }
+    .detail-placeholder {
+        /* Estilos del placeholder */
+        background-color: #f3f4f6;
+    }
+</style>
+{% endblock %}
